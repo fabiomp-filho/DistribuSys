@@ -2,15 +2,14 @@ package fabio.distribusys.br.userms.controllers;
 
 import fabio.distribusys.br.userms.domain.dto.UserRequestDTO;
 import fabio.distribusys.br.userms.domain.dto.UserResponseDTO;
+import fabio.distribusys.br.userms.pagination.CustomPage;
 import fabio.distribusys.br.userms.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping(value = "/users")
@@ -25,4 +24,14 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
+
+    @GetMapping
+    public ResponseEntity<CustomPage<UserResponseDTO>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers(page, size));
+
+    }
+
 }
