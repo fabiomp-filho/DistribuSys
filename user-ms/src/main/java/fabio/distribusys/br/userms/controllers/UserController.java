@@ -36,6 +36,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<UserResponseDTO>> getUserById(@PathVariable Long id) {
+      
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
 
     }
@@ -53,4 +54,5 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully!");
     }
+
 }
