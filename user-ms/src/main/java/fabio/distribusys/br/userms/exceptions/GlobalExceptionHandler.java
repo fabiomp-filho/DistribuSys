@@ -3,6 +3,7 @@ package fabio.distribusys.br.userms.exceptions;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,6 +28,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({BusinessException.class})
     public ResponseEntity<String> handleBusinessException(BusinessException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({HttpMessageNotReadableException.class})
+    public ResponseEntity<String> handleBusinessException(HttpMessageNotReadableException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getLocalizedMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

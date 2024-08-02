@@ -35,9 +35,25 @@ public class UserService {
 
         User entityToCreate = UserMapper.INSTANCE.toEntity(request);
 
-        User createdEntity = userRepository.save(entityToCreate);
+        User response = userRepository.save(entityToCreate);
 
-        return UserMapper.INSTANCE.toDTO(createdEntity);
+        return UserMapper.INSTANCE.toDTO(response);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public UserResponseDTO updateUser(Long id, UserRequestDTO request) {
+
+        User entity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User with id: " + id + " Not found."));
+
+        if (!entity.getEmail().equals(request.getEmail())) {
+            if (userRepository.existsByEmail(request.getEmail())) {
+                throw new BusinessException("The email provided is already in use. Please choose another email.");
+            }
+        }
+
+        UserMapper.INSTANCE.updateEntityFromDto(request, entity);
+
+        return UserMapper.INSTANCE.toDTO(entity);
     }
 
     @Transactional(readOnly = true)
@@ -46,16 +62,16 @@ public class UserService {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> entities = userRepository.findAll(pageable);
 
-        Page<UserResponseDTO> responseEntities = entities.map(UserMapper.INSTANCE::toDTO);
+        Page<UserResponseDTO> response = entities.map(UserMapper.INSTANCE::toDTO);
 
-        return new CustomPageImpl<>(responseEntities);
+        return new CustomPageImpl<>(response);
     }
 
     @Transactional(readOnly = true)
     public Optional<UserResponseDTO> getUserById(Long id) {
 
         User entity = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User with id " + id + " Not found"));
+                .orElseThrow(() -> new NotFoundException("User with id " + id + " Not found."));
 
         return Optional.ofNullable(UserMapper.INSTANCE.toDTO(entity));
     }
