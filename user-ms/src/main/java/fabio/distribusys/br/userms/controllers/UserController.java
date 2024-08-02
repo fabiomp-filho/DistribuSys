@@ -20,10 +20,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequest) {
-        UserResponseDTO savedUser = userService.createUser(userRequest);
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request));
     }
 
     @GetMapping
@@ -34,8 +33,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers(page, size));
 
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<UserResponseDTO>> getUserById(@PathVariable Long id){
+    public ResponseEntity<Optional<UserResponseDTO>> getUserById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO request) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(id, request));
     }
 }

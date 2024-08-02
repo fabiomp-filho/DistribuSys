@@ -4,6 +4,7 @@ import fabio.distribusys.br.userms.domain.dto.UserRequestDTO;
 import fabio.distribusys.br.userms.domain.dto.UserResponseDTO;
 import fabio.distribusys.br.userms.domain.entities.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 
@@ -15,4 +16,6 @@ public interface UserMapper {
     User toEntity(UserRequestDTO userRequest);
 
     UserResponseDTO toDTO(User user);
+
+    void updateEntityFromDto(UserRequestDTO dto, @MappingTarget User entity);
 }
