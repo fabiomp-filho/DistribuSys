@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleBusinessException(BusinessException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({HttpMessageNotReadableException.class})
     public ResponseEntity<String> handleBusinessException(HttpMessageNotReadableException e) {

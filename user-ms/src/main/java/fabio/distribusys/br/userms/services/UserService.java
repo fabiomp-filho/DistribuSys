@@ -75,4 +75,12 @@ public class UserService {
 
         return Optional.ofNullable(UserMapper.INSTANCE.toDTO(entity));
     }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void deleteUser(Long id) {
+        User entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User with id " + id + " Not found."));
+
+        userRepository.delete(entity);
+    }
 }
