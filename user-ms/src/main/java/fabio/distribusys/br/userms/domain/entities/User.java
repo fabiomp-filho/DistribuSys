@@ -31,8 +31,7 @@ public class User implements Serializable {
     @Column(nullable = false, length = 3)
     private Integer age;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
+    @Embedded
     private Address address;
 
     @Override
