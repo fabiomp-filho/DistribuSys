@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -34,4 +35,9 @@ public class UserController {
 
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<UserResponseDTO>> getUserById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
+
+    }
 }
