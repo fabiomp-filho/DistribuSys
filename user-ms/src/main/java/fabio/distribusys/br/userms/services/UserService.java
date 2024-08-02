@@ -4,6 +4,7 @@ import fabio.distribusys.br.userms.domain.dto.UserRequestDTO;
 import fabio.distribusys.br.userms.domain.dto.UserResponseDTO;
 import fabio.distribusys.br.userms.domain.entities.User;
 import fabio.distribusys.br.userms.exceptions.BusinessException;
+import fabio.distribusys.br.userms.exceptions.NotFoundException;
 import fabio.distribusys.br.userms.mapper.UserMapper;
 import fabio.distribusys.br.userms.pagination.CustomPage;
 import fabio.distribusys.br.userms.pagination.CustomPageImpl;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 
 @Service
@@ -48,5 +51,12 @@ public class UserService {
         return new CustomPageImpl<>(responseEntities);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<UserResponseDTO> getUserById(Long id) {
 
+        User entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User with id " + id + " Not found"));
+
+        return Optional.ofNullable(UserMapper.INSTANCE.toDTO(entity));
+    }
 }
