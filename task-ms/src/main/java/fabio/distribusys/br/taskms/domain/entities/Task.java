@@ -1,6 +1,5 @@
 package fabio.distribusys.br.taskms.domain.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -30,7 +29,7 @@ public class Task implements Serializable {
     private String description;
 
     @Column(nullable = false)
-    private Long userId;
+    private Long user;
 
     @Override
     public final boolean equals(Object o) {
