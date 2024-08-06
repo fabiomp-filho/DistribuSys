@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: user-ms
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_user_ms?createDatabaseIfNotExist=true&serverTimezone=America/Sao_Paulo
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+server:
+  port: 8080
+
+task:
+  service:
+    url: http://localhost:8081

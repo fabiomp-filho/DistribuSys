@@ -1,4 +1,4 @@
-package fabio.distribusys.br.userms;
+package fabio.distribusys.br.taskms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class UserMsApplication {
+public class TaskMsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserMsApplication.class, args);
+        SpringApplication.run(TaskMsApplication.class, args);
     }
 
 }
