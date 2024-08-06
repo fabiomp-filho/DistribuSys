@@ -30,4 +30,13 @@ public class TaskController {
 
         return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllTasks(page, size));
     }
+
+    @GetMapping("/get-by-user/{id}")
+    public ResponseEntity<CustomPage<TaskResponseDTO>> getTasksByUser(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.getTasksByUserId(id, page, size));
+    }
 }

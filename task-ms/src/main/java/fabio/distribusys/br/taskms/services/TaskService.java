@@ -47,4 +47,20 @@ public class TaskService {
 
         return new CustomPageImpl<>(response);
     }
+
+    @Transactional(readOnly = true)
+    public CustomPage<TaskResponseDTO> getTasksByUserId(Long userId, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Task> entities = taskRepository.findTasksByUser(userId, pageable);
+
+        if (entities.isEmpty()) {
+            return new CustomPageImpl<>(Page.empty(pageable));
+        }
+
+        Page<TaskResponseDTO> response = entities.map(TaskMapper.INSTANCE::toDTO);
+
+        return new CustomPageImpl<>(response);
+    }
 }
