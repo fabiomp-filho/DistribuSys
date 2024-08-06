@@ -5,6 +5,7 @@ import fabio.distribusys.br.userms.config.FeignConfig;
 import fabio.distribusys.br.userms.domain.dto.client.TaskResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,4 +19,7 @@ public interface TaskClient {
             Long id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size);
+
+    @DeleteMapping("/tasks/delete-tasks-by-user/{id}")
+    void deleteTaskByUser(@PathVariable Long id);
 }
