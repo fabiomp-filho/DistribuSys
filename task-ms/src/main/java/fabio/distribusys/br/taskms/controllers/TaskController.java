@@ -23,6 +23,14 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.createTask(request));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> updateTask(
+            @PathVariable Long id,
+            @Valid @RequestBody TaskRequestDTO request) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.updateTask(id, request));
+    }
+
     @GetMapping
     public ResponseEntity<CustomPage<TaskResponseDTO>> getAllTasks(
             @RequestParam(defaultValue = "0") int page,
@@ -39,8 +47,9 @@ public class TaskController {
 
         return ResponseEntity.status(HttpStatus.OK).body(taskService.getTasksByUserId(id, page, size));
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id){
+    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id) {
 
         return ResponseEntity.status(HttpStatus.OK).body(taskService.getTaskById(id));
 
@@ -53,8 +62,9 @@ public class TaskController {
 
         return ResponseEntity.status(HttpStatus.OK).body("Task with id " + id + " deleted successfully.");
     }
+
     @DeleteMapping("/delete-tasks-by-user/{id}")
-    public ResponseEntity<Void> deleteTaskByUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteTaskByUser(@PathVariable Long id) {
 
         taskService.deleteTasksByUser(id);
 
