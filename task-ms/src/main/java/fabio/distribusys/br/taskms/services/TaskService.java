@@ -4,6 +4,7 @@ import fabio.distribusys.br.taskms.controllers.client.UserClient;
 import fabio.distribusys.br.taskms.domain.dtos.TaskRequestDTO;
 import fabio.distribusys.br.taskms.domain.dtos.TaskResponseDTO;
 import fabio.distribusys.br.taskms.domain.entities.Task;
+import fabio.distribusys.br.taskms.exceptions.BusinessException;
 import fabio.distribusys.br.taskms.mapper.TaskMapper;
 import fabio.distribusys.br.taskms.pagination.CustomPage;
 import fabio.distribusys.br.taskms.pagination.CustomPageImpl;
@@ -61,6 +62,15 @@ public class TaskService {
 
         Page<TaskResponseDTO> response = entities.map(TaskMapper.INSTANCE::toDTO);
 
+        System.out.println(response.getContent());
         return new CustomPageImpl<>(response);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void deleteTask(Long id) {
+
+        Task entity = taskRepository.findById(id).orElseThrow(() -> new BusinessException("Task with id " + id + " not found."));
+
+        taskRepository.delete(entity);
     }
 }

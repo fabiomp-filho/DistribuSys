@@ -39,4 +39,12 @@ public class TaskController {
 
         return ResponseEntity.status(HttpStatus.OK).body(taskService.getTasksByUserId(id, page, size));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTaskById(@PathVariable Long id) {
+
+        taskService.deleteTask(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Task with id " + id + " deleted successfully.");
+    }
 }
