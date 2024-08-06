@@ -1,8 +1,12 @@
 package fabio.distribusys.br.userms.mapper;
 
+
 import fabio.distribusys.br.userms.domain.dto.UserRequestDTO;
 import fabio.distribusys.br.userms.domain.dto.UserResponseDTO;
+import fabio.distribusys.br.userms.domain.dto.UserWithTaskDTO;
+import fabio.distribusys.br.userms.domain.dto.client.TaskResponseDTO;
 import fabio.distribusys.br.userms.domain.entities.User;
+import fabio.distribusys.br.userms.pagination.CustomPageImpl;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
@@ -18,4 +22,7 @@ public interface UserMapper {
     UserResponseDTO toDTO(User user);
 
     void updateEntityFromDto(UserRequestDTO dto, @MappingTarget User entity);
+
+    UserWithTaskDTO toUserWithTaskDTO(User user, CustomPageImpl<TaskResponseDTO> tasks);
+
 }

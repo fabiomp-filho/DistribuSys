@@ -1,7 +1,10 @@
 package fabio.distribusys.br.userms.services;
 
+import fabio.distribusys.br.userms.client.TaskClient;
 import fabio.distribusys.br.userms.domain.dto.UserRequestDTO;
 import fabio.distribusys.br.userms.domain.dto.UserResponseDTO;
+import fabio.distribusys.br.userms.domain.dto.UserWithTaskDTO;
+import fabio.distribusys.br.userms.domain.dto.client.TaskResponseDTO;
 import fabio.distribusys.br.userms.domain.entities.User;
 import fabio.distribusys.br.userms.exceptions.BusinessException;
 import fabio.distribusys.br.userms.exceptions.NotFoundException;
@@ -26,6 +29,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TaskClient taskClient;
+
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public UserResponseDTO createUser(UserRequestDTO request) {
 
@@ -43,7 +49,8 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public UserResponseDTO updateUser(Long id, UserRequestDTO request) {
 
-        User entity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User with id: " + id + " Not found."));
+        User entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User with id: " + id + " Not found."));
 
         if (!entity.getEmail().equals(request.getEmail())) {
             if (userRepository.existsByEmail(request.getEmail())) {
@@ -68,12 +75,15 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<UserResponseDTO> getUserById(Long id) {
+    public UserWithTaskDTO getUserById(Long id, int size, int page) {
 
         User entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id " + id + " Not found."));
 
-        return Optional.ofNullable(UserMapper.INSTANCE.toDTO(entity));
+        Page<TaskResponseDTO> tasks = taskClient.getTasksByUser(id, size, page);
+        CustomPageImpl<TaskResponseDTO> pageableTasks = new CustomPageImpl<>(tasks);
+
+        return UserMapper.INSTANCE.toUserWithTaskDTO(entity, pageableTasks);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -82,5 +92,13 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User with id " + id + " Not found."));
 
         userRepository.delete(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean checkUserExists(Long id) {
+        Optional<User> entity = Optional.ofNullable(userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User with id " + id + " Not found.")));
+
+        return entity.isPresent();
     }
 }
