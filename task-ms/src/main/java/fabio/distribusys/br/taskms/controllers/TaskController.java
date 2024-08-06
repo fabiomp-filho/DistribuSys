@@ -47,4 +47,12 @@ public class TaskController {
 
         return ResponseEntity.status(HttpStatus.OK).body("Task with id " + id + " deleted successfully.");
     }
+    @DeleteMapping("/delete-tasks-by-user/{id}")
+    public ResponseEntity<Void> deleteTaskByUser(@PathVariable Long id){
+
+        taskService.deleteTasksByUser(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+    }
 }
