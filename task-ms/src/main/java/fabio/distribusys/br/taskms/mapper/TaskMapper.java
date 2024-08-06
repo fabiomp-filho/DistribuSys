@@ -16,6 +16,6 @@ public interface TaskMapper {
 
     TaskResponseDTO toDTO(Task task);
 
-    void toUpdateEntity(TaskRequestDTO dto, @MappingTarget Task task);
+    Task toUpdateEntity(TaskRequestDTO dto, @MappingTarget Task task);
 
 }

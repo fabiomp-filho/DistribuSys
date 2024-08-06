@@ -33,11 +33,23 @@ public class TaskService {
 
         userClient.CheckUserExists(request.getUser());
 
-        Task entityToCreate = TaskMapper.INSTANCE.toEntity(request);
+        Task entity = TaskMapper.INSTANCE.toEntity(request);
 
-        Task response = taskRepository.save(entityToCreate);
+        Task response = taskRepository.save(entity);
 
         return TaskMapper.INSTANCE.toDTO(response);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public TaskResponseDTO updateTask(Long id, TaskRequestDTO request) {
+
+        userClient.CheckUserExists(request.getUser());
+
+        Task toUpdateEntity = taskRepository.findById(id).orElseThrow(() -> new BusinessException("Task with id " + id + " not found."));
+
+        Task entity = TaskMapper.INSTANCE.toUpdateEntity(request, toUpdateEntity);
+
+        return TaskMapper.INSTANCE.toDTO(entity);
     }
 
     @Transactional(readOnly = true)
@@ -70,6 +82,7 @@ public class TaskService {
 
     @Transactional(readOnly = true)
     public TaskResponseDTO getTaskById(Long id) {
+
         Task entity = taskRepository.findById(id).orElseThrow(() -> new BusinessException("Task with " + id + " Not found."));
 
         return TaskMapper.INSTANCE.toDTO(entity);
