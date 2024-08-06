@@ -2,6 +2,7 @@ package fabio.distribusys.br.taskms.controllers;
 
 import fabio.distribusys.br.taskms.domain.dtos.TaskRequestDTO;
 import fabio.distribusys.br.taskms.domain.dtos.TaskResponseDTO;
+import fabio.distribusys.br.taskms.pagination.CustomPage;
 import fabio.distribusys.br.taskms.services.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,13 @@ public class TaskController {
     public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO request) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.createTask(request));
+    }
+
+    @GetMapping
+    public ResponseEntity<CustomPage<TaskResponseDTO>> getAllTasks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllTasks(page, size));
     }
 }
