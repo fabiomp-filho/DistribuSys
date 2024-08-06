@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class TaskService {
 
@@ -66,11 +68,28 @@ public class TaskService {
         return new CustomPageImpl<>(response);
     }
 
+    @Transactional(readOnly = true)
+    public TaskResponseDTO getTaskById(Long id) {
+        Task entity = taskRepository.findById(id).orElseThrow(() -> new BusinessException("Task with " + id + " Not found."));
+
+        return TaskMapper.INSTANCE.toDTO(entity);
+    }
+
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void deleteTask(Long id) {
 
         Task entity = taskRepository.findById(id).orElseThrow(() -> new BusinessException("Task with id " + id + " not found."));
 
         taskRepository.delete(entity);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void deleteTasksByUser(Long id) {
+
+        userClient.CheckUserExists(id);
+
+        List<Task> entities = taskRepository.findTasksByUser(id);
+
+        taskRepository.deleteAll(entities);
     }
 }

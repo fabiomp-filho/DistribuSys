@@ -92,6 +92,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User with id " + id + " Not found."));
 
         userRepository.delete(entity);
+        taskClient.deleteTaskByUser(id);
     }
 
     @Transactional(readOnly = true)
