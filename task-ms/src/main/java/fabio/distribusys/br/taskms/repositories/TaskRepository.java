@@ -1,0 +1,7 @@
+package fabio.distribusys.br.taskms.repositories;
+
+import fabio.distribusys.br.taskms.domain.entities.Task;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TaskRepository extends JpaRepository<Task, Long> {
+}
